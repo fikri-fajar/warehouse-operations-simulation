@@ -1,15 +1,5 @@
 # Warehouse Operations Portfolio
 
-English
-
-A Microsoft Excel projects that simulate real warehouse operations in a heavy equipment manufacturing environment.
-
-This portfolio was created to demonstrate my understanding of warehouse operations, inventory management, and business workflows using Microsoft Excel.
-
-The projects focus on practical warehouse processes such as Receiving, Put Away, Storage, Material Issue, Inventory Control, and Stock Opname.
-
-All projects in this portfolio are simulations created to apply warehouse management concepts through practical case studies using Microsoft Excel. The portfolio focuses on demonstrating an understanding of warehouse workflows, data management, and operational problem-solving with Excel.
-
 ## Introduction
 This project is a Microsoft Excel based simulation of warehouse operations in a heavy equipment manufacturing environment. It was created to demonstrate my understanding of warehouse workflows, inventory management, and operational processes.
 
