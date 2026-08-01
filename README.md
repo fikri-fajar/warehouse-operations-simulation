@@ -15,7 +15,7 @@ The objectives of this project are:
 -	To document and showcase a practical warehouse case study using Excel
 
 
-## Warehouse Operations Business Process
+## Business Process
 
 ### Overview
 This project simulates the core warehouse operational workflow commonly found in a heavy equipment manufacturing environment. Rather than focusing on building an ERP or Warehouse Management System (WMS), the project aims to develop a practical understanding of the warehouse business processes that are commonly managed through these systems. Microsoft Excel is used as a simulation tool to model the flow of warehouse data across different operational activities, providing a practical representation of real world warehouse operations.
@@ -67,3 +67,15 @@ The workbook is organized into multiple worksheets, each representing a specific
 
 Together, these worksheets illustrate how warehouse master data, operational transactions, inventory control, and performance monitoring can be integrated into a structured warehouse management workflow.
 
+-------------
+------------- on progress -------------
+--------------
+## Data Model
+
+## Excel Features
+
+## Dashboard
+
+## Project Highlights
+
+## Future Improvements
