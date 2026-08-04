@@ -69,7 +69,7 @@ Together, these worksheets illustrate how warehouse master data, operational tra
 
 -------------
 ------------- on progress -------------
---------------
+-------------
 ## Data Model
 
 ## Excel Features
