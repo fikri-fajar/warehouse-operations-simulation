@@ -78,13 +78,13 @@ The master data provides standardized references for materials, suppliers, and w
 
 The workbook uses three master data sources:
 
-- **01_Master_Material** — Defines material codes, descriptions, categories, units of measure, inventory attributes, and storage/handling requirements.
+- **01_Master_Material** — Defines material codes, descriptions, categories, units of measure, inventory attributes, and storage/handling requirements:
 <img src="assets/Screenshot_01_Master_Material_Sheet.png" width="800">
 
-- **02_Master_Supplier** — Defines supplier information used for purchasing and receiving activities.
+- **02_Master_Supplier** — Defines supplier information used for purchasing and receiving activities:
 <img src="assets/Screenshot_02_Master_Supplier_Sheet.png" width="800">
 
-- **03_Master_Location** — Defines warehouse storage and handling locations, including warehouse, zone, rack, level, and bin information.
+- **03_Master_Location** — Defines warehouse storage and handling locations, including warehouse, zone, rack, level, and bin information:
 <img src="assets/Screenshot_03_Master_Location_Sheet.png" width="800">
 
 ### Transaction Relationships
