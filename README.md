@@ -393,22 +393,6 @@ This approach separates manual operational inputs from reference data and calcul
 
 ## Dashboard
 
-The Dashboard is planned as the final reporting and monitoring layer of the workbook.
-
-It will summarize warehouse activities and inventory conditions using selected KPIs and visualizations.
-
-Planned dashboard components include:
-
-- Inventory summary
-- Stock movement overview
-- Goods Receipt activity
-- Goods Issue activity
-- Material Request status
-- Inventory variance
-- Cycle Count results
-- Key warehouse operational KPIs
-
-The Dashboard will be developed after the remaining transaction and inventory control worksheets are completed to ensure that the reported metrics are based on consistent and validated data.
 
 ---
 
