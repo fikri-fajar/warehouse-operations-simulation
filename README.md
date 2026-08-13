@@ -40,7 +40,7 @@ The following diagram illustrates the end-to-end warehouse operational workflow 
 | Inventory Management | Inventory records are maintained to monitor stock levels, locations, and material movements. |
 | Goods Request | Internal departments submit requests for materials required for operational or production activities. |
 | Picking | Requested materials are picked from their storage locations according to the material request. |
-| Material Issue | Picked materials are issued and recorded as outbound inventory transactions. |
+| Goods Issue | Picked materials are issued and recorded as outbound inventory transactions. |
 | Cycle Count | Periodic physical inventory counting is performed to verify inventory accuracy. |
 | Inventory Adjustment | Inventory records are updated when discrepancies are identified during the cycle count process. |
 | Dashboard & Reporting | Warehouse operational data is summarized into reports and dashboards for inventory monitoring and decision-making. |
