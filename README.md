@@ -67,15 +67,370 @@ The workbook is organized into multiple worksheets, each representing a specific
 
 Together, these worksheets illustrate how warehouse master data, operational transactions, inventory control, and performance monitoring can be integrated into a structured warehouse management workflow.
 
--------------
-------------- on progress -------------
--------------
+---
+
 ## Data Model
+
+The workbook is structured around three core master data tables and a series of warehouse transaction tables.
+
+The master data provides standardized references for materials, suppliers, and warehouse locations, while transaction worksheets record the movement of materials throughout the warehouse process.
+### Master Data
+
+The workbook uses three master data sources:
+
+- **01_Master_Material** — Defines material codes, descriptions, categories, units of measure, inventory attributes, and storage/handling requirements.
+- **02_Master_Supplier** — Defines supplier information used for purchasing and receiving activities.
+- **03_Master_Location** — Defines warehouse storage and handling locations, including warehouse, zone, rack, level, and bin information.
+
+### Transaction Relationships
+
+The main relationships between master data and transaction worksheets are:
+
+```text
+01_Master_Material
+        │
+        ├────────→ 04_Purchase_Order
+        │
+        ├────────→ 05_Goods_Receipt
+        │
+        ├────────→ 06_Put_Away
+        │
+        ├────────→ 07_Material_Request
+        │
+        ├────────→ 08_Picking_List
+        │
+        └────────→ 09_Goods_Issue
+
+
+02_Master_Supplier
+        │
+        └────────→ 04_Purchase_Order
+                         │
+                         ↓
+                  05_Goods_Receipt
+
+
+03_Master_Location
+        │
+        ├────────→ 05_Goods_Receipt
+        │
+        ├────────→ 06_Put_Away
+        │
+        ├────────→ 08_Picking_List
+        │
+        └────────→ 09_Goods_Issue
+```
+
+### Document Flow
+
+The transaction worksheets are connected through document references and line-level keys:
+
+```text
+Purchase Order
+      ↓
+Goods Receipt
+      ↓
+Put Away
+```
+
+and:
+
+```text
+Material Request
+      ↓
+Picking List
+      ↓
+Goods Issue
+```
+
+### Inventory Transaction Flow
+
+The Stock Card consolidates inventory movements from both inbound and outbound transactions:
+
+```text
+Goods Receipt ───────→ Stock Card
+   Stock In              │
+                         ↓
+                   Running Balance
+                         ↑
+   Stock Out             │
+Goods Issue ─────────────┘
+```
+
+Goods Receipt represents an inbound inventory transaction, while Goods Issue represents an outbound inventory transaction.
+
+Put Away is treated as a warehouse location movement after receiving and is not treated as a separate stock-in transaction in the Stock Card.
+
+The Stock Card therefore acts as the central inventory transaction history, consolidating stock-in and stock-out movements and maintaining the running balance for each material.
+
+### Key Reference Relationships
+
+The workbook uses document numbers, line numbers, material codes, supplier codes, and location codes to maintain transaction traceability.
+
+Examples include:
+
+- Material Code → Master Material
+- Supplier Code → Master Supplier
+- Location Code → Master Location
+- PO Number + PO Line → Goods Receipt
+- GR Number + GR Line → Put Away
+- Request Number + Request Line → Picking List
+- Request Number + Request Line → Goods Issue
+- Goods Receipt + Goods Issue → Stock Card
+
+Helper keys are used where necessary to maintain line-level relationships between operational documents.
+
+---
 
 ## Excel Features
 
+The workbook uses Microsoft Excel features to simulate warehouse administration, inventory control, and transaction processing.
+
+Key Excel features used in the project include:
+
+- Excel Tables
+- Structured References
+- Data Validation
+- Conditional Formatting
+- Lookup Functions
+- Conditional Aggregation
+- Dynamic Array Functions
+- Automated Inventory Transaction Consolidation
+
+### Excel Tables
+
+Master and transaction data are structured as Excel Tables to support:
+
+- Structured references
+- Automatic formula expansion
+- Filtering and sorting
+- Consistent data entry
+- Easier maintenance of transaction records
+
+### Data Validation
+
+Dropdown lists are used for controlled fields such as:
+
+- Request Priority
+- Approval Status
+- Request Status
+- Warehouse classifications
+- Other standardized operational fields
+
+This helps reduce inconsistent manual entries.
+
+### Conditional Formatting
+
+Conditional formatting is used to highlight important operational information such as:
+
+- Urgent requests
+- Pending or rejected transactions
+- Inventory variances
+- Operational statuses
+- Other warehouse exceptions
+
+---
+
+## Excel Formulas & Technical Implementation
+
+The project applies Excel formulas and structured references to support practical warehouse activities such as master data retrieval, inventory validation, transaction consolidation, quantity tracking, and stock balance monitoring.
+
+Rather than using Excel only for data entry, formulas are applied to simulate how warehouse transaction data can be processed and connected.
+
+### Key Excel Formulas & Functions
+
+| Formula / Function | Application | Warehouse Use Case |
+|---|---|---|
+| `XLOOKUP` | Reference data retrieval | Retrieves related master data such as material descriptions, Base UoM, supplier information, and other reference data. |
+| `VLOOKUP` | Reference data retrieval | Retrieves related information from reference tables where the lookup key is positioned in the first column. |
+| `SUMIFS` | Conditional aggregation | Calculates quantities based on multiple criteria, such as total issued quantity for a specific Material Request and Request Line. |
+| `IF` | Conditional logic | Handles business conditions, exceptions, and validation logic. |
+| `VSTACK` | Vertical data consolidation | Combines Goods Receipt and Goods Issue transaction records into the Stock Card transaction history. |
+| `HSTACK` | Horizontal data consolidation | Combines related fields from different sources when constructing consolidated datasets. |
+| Structured References | Table-based formulas | References Excel Table columns using field names instead of fixed cell ranges. |
+
+### XLOOKUP — Master Data Retrieval
+
+`XLOOKUP` is used to retrieve related information from master data and transaction worksheets.
+
+Example:
+
+```excel
+=XLOOKUP([@[Material Code]],tbl_MasterMaterial[Material Code],tbl_MasterMaterial[Material Description],"")
+```
+
+This reduces repetitive manual data entry and helps maintain consistency between transaction worksheets and master data.
+
+### VLOOKUP — Reference Data Retrieval
+
+`VLOOKUP` is used in selected areas where the lookup key is positioned in the first column of the reference table.
+
+Example:
+
+```excel
+=VLOOKUP([@[Material Code]],tbl_MasterMaterial[[Material Code]:[Base UoM]],5,FALSE)
+```
+
+The project therefore demonstrates the use of both traditional and modern Excel lookup techniques.
+
+### SUMIFS — Transaction Quantity Tracking
+
+`SUMIFS` is used to calculate transaction quantities based on multiple criteria.
+
+For example, the Material Request worksheet can calculate the total quantity issued against a specific request line:
+
+```excel
+=SUMIFS(
+tbl_GoodsIssue[Quantity Issued],
+tbl_GoodsIssue[Request Number],[@[Request Number]],
+tbl_GoodsIssue[Request Line],[@[Request Line]]
+)
+```
+
+This supports partial fulfillment scenarios where one Material Request may be fulfilled through multiple Goods Issue transactions.
+
+### IF — Conditional Business Logic
+
+`IF` is used throughout the workbook to handle business conditions and prevent inappropriate calculations.
+
+For example:
+
+```excel
+=IF([@[Ordered Qty]]=0,"",([@[Received Qty]]-[@[Ordered Qty]])/[@[Ordered Qty]])
+```
+
+This prevents division-by-zero errors and keeps the worksheet easier to interpret.
+
+### VSTACK — Stock Card Transaction Consolidation
+
+`VSTACK` is used to consolidate inbound and outbound warehouse transactions into a single Stock Card transaction history.
+
+Conceptually:
+
+```excel
+=VSTACK(
+    Goods_Receipt_Transactions,
+    Goods_Issue_Transactions
+)
+```
+
+This allows the Stock Card to combine Goods Receipt and Goods Issue records without manually copying transactions between worksheets.
+
+The consolidated transaction history is then used to calculate inventory movement and running balances.
+
+### HSTACK — Horizontal Data Consolidation
+
+`HSTACK` is used when related fields from different data sources need to be combined horizontally into a single dataset.
+
+Conceptually:
+
+```excel
+=HSTACK(
+    Source_Data_1,
+    Source_Data_2
+)
+```
+
+This dynamic-array approach supports the construction of consolidated transaction data while keeping the original operational worksheets separated according to their respective warehouse processes.
+
+### Structured References
+
+The workbook uses Excel Tables and structured references to improve formula readability and maintainability.
+
+For example:
+
+```excel
+tbl_GoodsIssue[Quantity Issued]
+```
+
+is used instead of fixed cell ranges such as:
+
+```excel
+M2:M100
+```
+
+This allows formulas to accommodate additional transaction rows as the dataset grows.
+
+### Formula Design Approach
+
+The project follows a simple data-processing approach:
+
+```text
+Manual Input
+     ↓
+Reference / Lookup
+     ↓
+Calculation
+     ↓
+Validation
+     ↓
+Operational Status
+     ↓
+Inventory Transaction
+```
+
+For example:
+
+```text
+Material Request
+      ↓
+Reference / Lookup
+      ↓
+Stock Sufficiency Check
+      ↓
+Approval
+      ↓
+Picking List
+      ↓
+Goods Issue
+      ↓
+Stock Card
+```
+
+This approach separates manual operational inputs from reference data and calculated fields, making the workbook easier to understand, maintain, and audit.
+
+---
+
 ## Dashboard
+
+The Dashboard is planned as the final reporting and monitoring layer of the workbook.
+
+It will summarize warehouse activities and inventory conditions using selected KPIs and visualizations.
+
+Planned dashboard components include:
+
+- Inventory summary
+- Stock movement overview
+- Goods Receipt activity
+- Goods Issue activity
+- Material Request status
+- Inventory variance
+- Cycle Count results
+- Key warehouse operational KPIs
+
+The Dashboard will be developed after the remaining transaction and inventory control worksheets are completed to ensure that the reported metrics are based on consistent and validated data.
+
+---
 
 ## Project Highlights
 
-## Future Improvements
+The project demonstrates an end-to-end warehouse operations simulation for a heavy equipment manufacturing environment.
+
+Key highlights include:
+
+- Designed an end-to-end warehouse business process covering inbound, storage, inventory, and outbound activities.
+- Developed master data structures for materials, suppliers, and warehouse locations.
+- Created a Purchase Order transaction process.
+- Simulated Goods Receipt activities, including received quantity, accepted quantity, rejected quantity, delivery status, and variance monitoring.
+- Incorporated Put Away activities to represent the movement of received materials from receiving areas into warehouse storage locations.
+- Developed a Material Request process for internal material requirements.
+- Created a Picking List to simulate warehouse picking activities.
+- Developed a Goods Issue process to record outbound inventory transactions.
+- Built a Stock Card that consolidates Goods Receipt and Goods Issue transactions.
+- Implemented running inventory balances based on inbound and outbound movements.
+- Applied lookup, conditional aggregation, and dynamic array formulas to support warehouse transaction processing.
+- Used line-level reference keys to improve transaction traceability across operational documents.
+- Applied Excel Tables, structured references, data validation, and conditional formatting to improve usability and data consistency.
+
+The project is designed not only as an Excel exercise, but also as a demonstration of warehouse process understanding, inventory control, document traceability, and operational administration.
+
