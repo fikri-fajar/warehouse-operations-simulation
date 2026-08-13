@@ -46,6 +46,15 @@ The following diagram illustrates the end-to-end warehouse operational workflow 
 | Dashboard & Reporting | Warehouse operational data is summarized into reports and dashboards for inventory monitoring and decision-making. |
 
 ---
+## Excel Implementation
+
+### Stock Card
+
+The Stock Card consolidates inventory movements from Goods Receipt and Goods Issue into a chronological transaction history. It calculates quantity in, quantity out, net movement, and running balance for inventory monitoring.
+
+  <img src="assets/Screenshot_10_Master_Stock_Card.png" width="800">
+
+---
 
 ## Workbook Structure
 The workbook is organized into multiple worksheets, each representing a specific function within the warehouse operation. This structure follows the business process illustrated in the previous section, allowing data to flow logically from purchasing and receiving to inventory control and outbound material handling. 
