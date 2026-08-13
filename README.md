@@ -38,7 +38,7 @@ The following diagram illustrates the end-to-end warehouse operational workflow 
 | Put Away | Approved materials are assigned and transferred to their designated storage locations. |
 | Storage | Materials are stored in warehouse locations until they are required for operational use. |
 | Inventory Management | Inventory records are maintained to monitor stock levels, locations, and material movements. |
-| Material Request | Internal departments submit requests for materials required for operational or production activities. |
+| Goods Request | Internal departments submit requests for materials required for operational or production activities. |
 | Picking | Requested materials are picked from their storage locations according to the material request. |
 | Material Issue | Picked materials are issued and recorded as outbound inventory transactions. |
 | Cycle Count | Periodic physical inventory counting is performed to verify inventory accuracy. |
